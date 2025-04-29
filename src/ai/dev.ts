@@ -1,1 +1,3 @@
-// Flows will be imported for their side effects in this file.
+import '@/ai/flows/detailed-risk-breakdown.ts';
+import '@/ai/flows/analyze-url.ts';
+import '@/ai/flows/dynamic-ai-feedback.ts';
