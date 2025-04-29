@@ -9,6 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { analyzeUrlDetailed } from "@/ai/flows/detailed-risk-breakdown";
 import { UrlRiskAssessment } from "@/services/url-scan";
 import { Info, ShieldCheck, AlertTriangle, XOctagon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const riskLevels = {
   safe: { label: "Safe", color: "text-green-500", icon: ShieldCheck },
@@ -96,7 +97,7 @@ export default function Home() {
       )}
 
       {riskAssessment && (
-        <Card className="w-full max-w-2xl rounded-lg shadow-md">
+        <Card className="w-full max-w-2xl rounded-lg shadow-md transition-all duration-300">
           <CardHeader>
             <CardTitle className="text-xl font-semibold flex items-center gap-2">
               {riskLevel ? (
@@ -116,7 +117,7 @@ export default function Home() {
                 Summary <Info className="h-4 w-4 text-muted-foreground cursor-help" title="Quick overview of risk level." />
               </h2>
               {riskLevel ? (
-                <p className={riskLevel.color}>
+                <p className={cn(riskLevel.color, "font-medium")}>
                   {riskLevel.label} - Confidence: {riskAssessment.confidenceScore}%
                 </p>
               ) : (
@@ -129,7 +130,7 @@ export default function Home() {
                 Details <Info className="h-4 w-4 text-muted-foreground cursor-help" title="In-depth explanation of the detected risks." />
               </h2>
               {detailedAnalysis ? (
-                <p>{detailedAnalysis.substring(0, 200)}{detailedAnalysis.length > 200 ? "..." : ""}</p>
+                <p>{detailedAnalysis}</p>
               ) : (
                 <p>No details available.</p>
               )}

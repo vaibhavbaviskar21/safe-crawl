@@ -1,20 +1,21 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 200 0% 86%; /* Slightly darker gray */
-    --foreground: 0 0% 3.9%;
+    --background: 220 20% 96%; /* Light gray background */
+    --foreground: 240 10% 10%; /* High-contrast dark text */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 220 50% 40%; /* Dark blue for primary actions */
+    --primary: 220 50% 40%; /* Deep blue for primary actions */
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
@@ -86,11 +87,9 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
   }
 }
-
-
