@@ -7,9 +7,11 @@ const alertVariants = cva(
   "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
   {
     variants: {
+      // Apply sans-serif font and add subtle shadow
       variant: {
-        default: "bg-background text-foreground",
-        destructive:
+        default: "bg-[#DCDCDC] text-foreground font-sans shadow-md", // Darker gray background
+        success: "bg-green-100 text-green-800 font-sans shadow-md", // Example success color
+        destructive: // Use dark blue for destructive, consistent with the blueprint
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
       },
     },

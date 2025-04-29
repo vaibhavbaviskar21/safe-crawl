@@ -8,7 +8,6 @@ import { Progress } from "@/components/ui/progress";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { analyzeUrlDetailed } from "@/ai/flows/detailed-risk-breakdown";
 import { UrlRiskAssessment } from "@/services/url-scan";
-import { Badge } from "@/components/ui/badge";
 import { Info, ShieldCheck, AlertTriangle, XOctagon } from "lucide-react";
 
 const riskLevels = {
@@ -130,7 +129,7 @@ export default function Home() {
                 Details <Info className="h-4 w-4 text-muted-foreground cursor-help" title="In-depth explanation of the detected risks." />
               </h2>
               {detailedAnalysis ? (
-                <p>{detailedAnalysis}</p>
+                <p>{detailedAnalysis.substring(0, 200)}{detailedAnalysis.length > 200 ? "..." : ""}</p>
               ) : (
                 <p>No details available.</p>
               )}
