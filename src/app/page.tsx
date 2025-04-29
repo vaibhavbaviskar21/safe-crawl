@@ -9,12 +9,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { analyzeUrlDetailed } from "@/ai/flows/detailed-risk-breakdown";
 import { UrlRiskAssessment } from "@/services/url-scan";
 import { Badge } from "@/components/ui/badge";
-import { Info } from "lucide-react";
+import { Info, ShieldCheck, AlertTriangle, XOctagon } from "lucide-react";
 
 const riskLevels = {
-  safe: { label: "Safe", color: "text-green-500" },
-  warning: { label: "Warning", color: "text-orange-500" },
-  dangerous: { label: "Dangerous", color: "text-red-500" },
+  safe: { label: "Safe", color: "text-green-500", icon: ShieldCheck },
+  warning: { label: "Warning", color: "text-orange-500", icon: AlertTriangle },
+  dangerous: { label: "Dangerous", color: "text-red-500", icon: XOctagon },
 };
 
 const getRiskLevel = (riskAssessment: UrlRiskAssessment | null) => {
@@ -79,30 +79,35 @@ export default function Home() {
         <Input
           type="url"
           placeholder="Enter or drag a URL to analyze"
-          className="flex-grow"
+          className="flex-grow rounded-md shadow-sm focus:ring-primary focus:border-primary"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         />
-        <Button onClick={analyze} disabled={isLoading}>
+        <Button onClick={analyze} disabled={isLoading} className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md shadow-sm">
           {isLoading ? "Analyzing..." : "Analyze"}
         </Button>
       </div>
 
       {isLoading && (
         <div className="w-full max-w-2xl mb-8">
-          <Progress value={progress} />
+          <Progress value={progress} className="bg-secondary h-2 rounded-full" />
         </div>
       )}
 
       {riskAssessment && (
-        <Card className="w-full max-w-2xl">
+        <Card className="w-full max-w-2xl rounded-lg shadow-md">
           <CardHeader>
-            <CardTitle>
-              {riskLevel ? `Risk Level: ${riskLevel.label}` : "Analysis Results"}
+            <CardTitle className="text-xl font-semibold flex items-center gap-2">
+              {riskLevel ? (
+                <>
+                  <riskLevel.icon className={riskLevel.color + " h-5 w-5"} />
+                  {`Risk Level: ${riskLevel.label}`}
+                </>
+              ) : "Analysis Results"}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-muted-foreground">
               {riskLevel ? `This URL has been assessed as ${riskLevel.label}.` : "Analyzing URL..."}
             </CardDescription>
           </CardHeader>
@@ -155,16 +160,16 @@ export default function Home() {
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="outline" className="mt-8">Dynamic AI Feedback</Button>
+          <Button variant="outline" className="mt-8 rounded-md shadow-sm">Dynamic AI Feedback</Button>
         </AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-lg shadow-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Feedback</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-muted-foreground">
               This feature is not implemented yet.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogAction>Accept</AlertDialogAction>
+          <AlertDialogAction className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md shadow-sm">Accept</AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
     </div>
