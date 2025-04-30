@@ -1,67 +1,89 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
   font-family: 'Inter', sans-serif;
+  @apply antialiased; /* Ensure font smoothing */
 }
 
 @layer base {
   :root {
     --background: 200 0% 96.1%; /* Light gray #f5f5f5 */
-    --foreground: 240 0% 10%; /* Dark text #1a1a1a */
+    --foreground: 240 10% 3.9%; /* Dark text #1a1a1a - Increased contrast */
     --card: 0 0% 100%;
-    --card-foreground: 240 0% 10%; /* Ensure card text is dark */
+    --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 0% 10%; /* Ensure popover text is dark */
-    --primary: 221 83% 53%; /* Deep blue */
-    --primary-foreground: 0 0% 98%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 210 100% 20%; /* Deep blue #003366 */
+    --primary-foreground: 0 0% 98%; /* White text for deep blue */
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84.2% 60.2%; /* Existing red */
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 221 83% 53%; /* Use primary blue for ring */
+    --ring: 210 100% 20%; /* Deep blue for ring */
+    --radius: 0.5rem;
+
+    /* SafeCrawl Specific Colors */
+    --success: 145 63% 42%; /* #27ae60 */
+    --success-foreground: 0 0% 100%;
+    --warning: 39 92% 54%; /* #f39c12 */
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 79% 63%; /* #e74c3c */
+    --danger-foreground: 0 0% 100%;
+    --moderate-risk: 39 92% 54%; /* Keep warning color */
+
+    /* Chart colors (optional, can be adjusted) */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --moderate-risk: 39 96% 48%;  /* Yellow-Orange */
   }
   .dark {
+    /* Define dark mode variables if needed, keeping consistency */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 100% 70%; /* Lighter blue for dark mode */
+    --primary-foreground: 240 10% 3.9%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 79% 63%; /* Keep same red */
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 210 40% 98%; /* Use primary blue for ring */
+    --ring: 210 100% 70%;
+    /* SafeCrawl Specific Colors - Dark */
+    --success: 145 58% 50%;
+    --success-foreground: 0 0% 10%;
+    --warning: 39 88% 60%;
+    --warning-foreground: 0 0% 10%;
+    --danger: 0 75% 70%;
+    --danger-foreground: 0 0% 10%;
+    --moderate-risk: 39 88% 60%;
+    /* Chart colors for dark mode */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --moderate-risk: 39 96% 48%; /* Yellow-Orange */
   }
 }
 
@@ -71,26 +93,84 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600; /* Slightly bolder headings */
+    font-weight: 600; /* Maintain slightly bolder headings */
   }
 }
 
 @layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
+  /* Subtle Animated Background Pattern */
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, hsla(var(--border)/0.5) 1px, transparent 1px), linear-gradient(to bottom, hsla(var(--border)/0.5) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: bg-pan 10s linear infinite;
   }
 
-  @keyframes fadeIn {
+  @keyframes bg-pan {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 30px 30px; }
+  }
+
+  /* Gradient Text Effect */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-blue-500 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  /* Glassmorphism Card Style */
+  .glassmorphism-card {
+    @apply bg-white/60 backdrop-filter backdrop-blur-lg border border-white/30 rounded-xl shadow-lg;
+  }
+  .dark .glassmorphism-card {
+     @apply bg-black/50 backdrop-filter backdrop-blur-lg border border-white/10 rounded-xl shadow-lg;
+  }
+
+  /* Neon Glow Hover Effect for Button */
+  .neon-glow-hover {
+    transition: box-shadow 0.3s ease-in-out, transform 0.2s ease;
+  }
+  .neon-glow-hover:hover:not(:disabled) {
+    box-shadow: 0 0 5px theme('colors.blue.500'), 0 0 10px theme('colors.blue.500'), 0 0 15px theme('colors.blue.500');
+    transform: translateY(-1px);
+  }
+  .neon-glow-hover:active:not(:disabled) {
+      transform: scale(0.98); /* Microinteraction */
+  }
+
+
+  /* Result Card Animation */
+  .animate-result-appear {
+    animation: resultAppear 0.5s ease-out forwards;
+  }
+
+  @keyframes resultAppear {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(20px) scale(0.98);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
+
+   /* Ribbon Style */
+  .ribbon-label {
+    @apply relative px-4 py-1 text-sm font-medium text-white rounded-r-md;
+  }
+  .ribbon-label::before {
+    content: '';
+    position: absolute;
+    left: -10px; /* Adjust as needed */
+    top: 0;
+    border-top: 14px solid transparent; /* Half of height */
+    border-bottom: 14px solid transparent; /* Half of height */
+    border-right: 10px solid; /* Same as left offset */
+    border-right-color: inherit; /* Inherits the background color */
+  }
+
+    .bg-success { background-color: hsl(var(--success)); color: hsl(var(--success-foreground)); border-right-color: hsl(var(--success)); }
+    .bg-warning { background-color: hsl(var(--warning)); color: hsl(var(--warning-foreground)); border-right-color: hsl(var(--warning)); }
+    .bg-danger { background-color: hsl(var(--danger)); color: hsl(var(--danger-foreground)); border-right-color: hsl(var(--danger)); }
+
 }

@@ -10,7 +10,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border border-gray-200/80 bg-card text-card-foreground shadow-lg font-sans", // Increased rounding, softer shadow, adjusted border
+      "rounded-xl border border-gray-200/80 bg-card text-card-foreground shadow-lg font-sans", // Changed to rounded-xl, kept shadow-lg
       className
     )}
     {...props}
@@ -24,20 +24,20 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-5 border-b border-gray-200/80", className)} // Adjusted padding and border
+    className={cn("flex flex-col space-y-1.5 p-5 border-b border-gray-200/80 rounded-t-xl", className)} // Added rounded-t-xl
     {...props}
   />
 ))
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLParagraphElement, // Changed to paragraph element for semantic correctness
+  React.HTMLAttributes<HTMLHeadingElement> // Kept HTMLHeadingElement attributes for compatibility
 >(({ className, ...props }, ref) => (
-  <div
+  <p // Changed to <p> tag
     ref={ref}
     className={cn(
-      "text-xl font-semibold leading-none tracking-tight font-sans",
+      "text-xl font-semibold leading-none tracking-tight font-sans", // Font size updated in page.tsx instead
       className
     )}
     {...props}
@@ -45,11 +45,12 @@ const CardTitle = React.forwardRef<
 ))
 CardTitle.displayName = "CardTitle"
 
+
 const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLParagraphElement, // Changed to paragraph element
+  React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <div
+  <p // Changed to <p> tag
     ref={ref}
     className={cn("text-sm text-muted-foreground font-sans", className)}
     {...props}
@@ -71,7 +72,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-4 pt-0 font-sans", className)} // Adjusted padding
+    className={cn("flex items-center p-4 pt-0 font-sans rounded-b-xl", className)} // Added rounded-b-xl
     {...props}
   />
 ))

@@ -1,20 +1,16 @@
 import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
+import { Inter } from 'next/font/google'; // Import Inter font
 import './globals.css';
+import { Toaster } from "@/components/ui/toaster"; // Import Toaster
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-inter', // Optional: define CSS variable
 });
 
 export const metadata: Metadata = {
   title: 'SafeCrawl - URL Risk Analyzer',
-  description: 'Analyze URLs for potential security risks.',
+  description: 'Analyze URLs for potential security risks. Modern cybersecurity tool.',
 };
 
 export default function RootLayout({
@@ -24,10 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      {/* Apply Inter font class to the body */}
+      <body className={`${inter.className} bg-grid-pattern`}>
         {children}
+        <Toaster /> {/* Add Toaster component here */}
       </body>
     </html>
   );
 }
-
