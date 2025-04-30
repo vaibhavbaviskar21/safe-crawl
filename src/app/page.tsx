@@ -223,7 +223,15 @@ export default function Home() {
                 className="flex-grow rounded-full shadow-inner bg-transparent border-none focus:ring-0 h-12 text-base px-5 placeholder-muted-foreground"
                 value={url}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+                // We want to store the full URL but display only the domain in the input field
+                // The 'value' prop controls the display, but we need a separate state or logic
+                // to hold the full URL for analysis.
+                // A simpler approach for now is to just update the state with the input value
+                // and let the 'analyze' function handle parsing the full URL later.
+                // This keeps the UI input simple while ensuring the full URL is used for analysis.
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
                 aria-label="URL Input"
+                // We are keeping the value as the full URL to ensure the analyze function works correctly.
               />
               <Button
                 onClick={() => analyze()}
