@@ -4,15 +4,16 @@
 import { useState, useCallback, ChangeEvent, DragEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Textarea } from "@/components/ui/textarea"; // Import Textarea
-import { Label } from "@/components/ui/label"; // Import Label
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { analyzeUrlDetailed, AnalyzeUrlDetailedOutput } from "@/ai/flows/detailed-risk-breakdown";
 import { analyzeUrlWithFeedback, AnalyzeUrlWithFeedbackOutput } from "@/ai/flows/dynamic-ai-feedback";
 import { UrlRiskAssessment } from "@/services/url-scan";
 import { Info, ShieldCheck, AlertTriangle, XOctagon } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 // Combined type for risk assessment results
@@ -129,189 +130,182 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-[#f5f5f5] py-16 px-4 sm:px-8 font-sans transition-colors duration-300">
-       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-[#1a1a1a] text-center">
-        SafeCrawl <span className="text-primary">- URL Risk Analyzer</span>
-      </h1>
+    <TooltipProvider> {/* Wrap the whole page in TooltipProvider */}
+        <div className="flex flex-col items-center justify-start min-h-screen bg-[#f5f5f5] py-16 px-4 sm:px-8 font-sans transition-colors duration-300">
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-[#1a1a1a] text-center">
+            SafeCrawl <span className="text-primary">- URL Risk Analyzer</span>
+        </h1>
 
-      <div
-        className="w-full max-w-2xl mb-8 p-2 border-2 border-dashed border-gray-300 rounded-lg transition-colors duration-200"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        >
-        <div className="flex flex-col sm:flex-row gap-3">
-            <Input
-              type="url"
-              placeholder="Enter or drag & drop a URL to analyze (e.g., https://example.com)"
-              className="flex-grow rounded-md shadow-inner bg-white border-gray-300 focus:ring-primary focus:border-primary h-12 text-base px-4"
-              value={url}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            />
-            <Button
-              onClick={analyze}
-              disabled={isLoading || !url}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm h-12 px-6 text-base font-medium transition-all duration-200 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+        <div
+            className="w-full max-w-2xl mb-8 p-2 border-2 border-dashed border-gray-300 rounded-lg transition-colors duration-200 hover:border-primary"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             >
-              {isLoading ? "Analyzing..." : "Analyze"}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3">
+                <Input
+                type="url"
+                placeholder="Enter or drag & drop a URL (e.g., https://example.com)"
+                className="flex-grow rounded-md shadow-inner bg-white border-gray-300 focus:ring-primary focus:border-primary h-12 text-base px-4"
+                value={url}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+                />
+                <Button
+                onClick={analyze}
+                disabled={isLoading || !url}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm h-12 px-6 text-base font-medium transition-all duration-200 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                {isLoading ? "Analyzing..." : "Analyze"}
+                </Button>
+            </div>
         </div>
-      </div>
 
 
-      {isLoading && (
-        <div className="w-full max-w-2xl mb-8 px-1">
-          <Progress value={progress} className="bg-gray-200 h-2 rounded-full [&>div]:bg-primary" />
-        </div>
-      )}
+        {isLoading && (
+            <div className="w-full max-w-2xl mb-8 px-1">
+            <Progress value={progress} className="bg-gray-200 h-2 rounded-full [&>div]:bg-primary" />
+            </div>
+        )}
 
-      {!isLoading && riskResult && (
-        <Card className="w-full max-w-2xl rounded-lg shadow-lg bg-white border border-gray-200/80 transition-all duration-500 ease-out animate-fade-in">
-          <CardHeader className={cn("rounded-t-lg p-5 border-b", riskLevel?.bg, riskLevel?.border)}>
-             <CardTitle className="text-xl font-semibold flex items-center gap-2 text-[#1a1a1a]">
-              {riskLevel ? (
-                <>
-                  <riskLevel.icon className={cn(riskLevel.color, "h-6 w-6")} />
-                  Risk Level:
-                  <span className={cn("font-bold", riskLevel.color)}>{riskLevel.label}</span>
-                  <span className="text-sm font-normal text-gray-600 ml-auto">
-                    (Confidence: {riskResult.confidenceScore}%)
-                  </span>
-                </>
-              ) : "Analysis Results"}
-            </CardTitle>
-           </CardHeader>
-          <CardContent className="p-5 grid gap-5">
-            {/* Summary Section */}
-            <section>
-              <h2 className="text-lg font-semibold flex items-center gap-2 mb-2 text-[#1a1a1a]">
-                Summary
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="h-4 w-4 text-gray-500 cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Quick overview of the analysis findings.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </h2>
-              {riskLevel ? (
-                 <p className={cn("font-medium text-base", riskLevel.color)}>
-                   {riskResult.isSafe
-                     ? "The URL appears to be safe based on current analysis."
-                     : `Potential risks identified: ${riskResult.riskReasons.join(', ')}.`}
-                 </p>
-              ) : (
-                <p className="text-gray-500">Loading summary...</p>
-              )}
-            </section>
-
-            {/* Details Section */}
-            {riskResult.detailedAnalysis && (
+        {!isLoading && riskResult && (
+            <Card className="w-full max-w-2xl rounded-lg shadow-lg bg-white border border-gray-200/80 transition-all duration-500 ease-out animate-fade-in">
+            <CardHeader className={cn("rounded-t-lg p-5 border-b", riskLevel?.bg, riskLevel?.border)}>
+                <CardTitle className="text-xl font-semibold flex items-center gap-2 text-[#1a1a1a]">
+                {riskLevel ? (
+                    <>
+                    <riskLevel.icon className={cn(riskLevel.color, "h-6 w-6")} />
+                    Risk Level:
+                    <span className={cn("font-bold", riskLevel.color)}>{riskLevel.label}</span>
+                    <span className="text-sm font-normal text-gray-600 ml-auto">
+                        (Confidence: {riskResult.confidenceScore}%)
+                    </span>
+                    </>
+                ) : "Analysis Results"}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="p-5 grid gap-5">
+                {/* Summary Section */}
                 <section>
                 <h2 className="text-lg font-semibold flex items-center gap-2 mb-2 text-[#1a1a1a]">
-                    Details
-                    <TooltipProvider>
+                    Summary
                     <Tooltip>
                         <TooltipTrigger asChild>
                         <Info className="h-4 w-4 text-gray-500 cursor-help" />
                         </TooltipTrigger>
                         <TooltipContent>
-                        <p>In-depth explanation of detected risks or safety confirmation.</p>
+                        <p>Quick overview of the analysis findings.</p>
                         </TooltipContent>
                     </Tooltip>
-                    </TooltipProvider>
                 </h2>
-                <p className="text-gray-700 text-base leading-relaxed">{riskResult.detailedAnalysis}</p>
-                </section>
-            )}
-
-
-            {/* Recommendations Section */}
-            <section>
-              <h2 className="text-lg font-semibold flex items-center gap-2 mb-2 text-[#1a1a1a]">
-                Recommendations
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                       <Info className="h-4 w-4 text-gray-500 cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Suggested actions based on the analysis results.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </h2>
-              <ul className="list-disc list-inside text-gray-700 space-y-1 text-base">
-                {riskLevel && riskLevel.label === "Dangerous" ? (
-                    <>
-                    <li><span className="font-semibold">Strongly avoid</span> accessing this URL.</li>
-                    <li>Do not enter any personal information.</li>
-                    <li>Consider reporting the URL if it seems malicious (e.g., to Google Safe Browsing).</li>
-                    </>
-                ) : riskLevel && riskLevel.label === "Warning" ? (
-                    <>
-                    <li>Proceed with <span className="font-semibold">extreme caution</span>.</li>
-                    <li>Verify the website's authenticity before interacting.</li>
-                    <li>Be wary of requests for login credentials or personal data.</li>
-                    </>
+                {riskLevel ? (
+                    <p className={cn("font-medium text-base", riskLevel.color)}>
+                    {riskResult.isSafe
+                        ? "The URL appears to be safe based on current analysis."
+                        : `Potential risks identified: ${riskResult.riskReasons.join(', ')}.`}
+                    </p>
                 ) : (
-                    <li>The URL is likely safe to visit.</li>
+                    <p className="text-gray-500">Loading summary...</p>
                 )}
-                 <li>Always keep your browser and security software updated.</li>
-              </ul>
-            </section>
-          </CardContent>
-           <CardFooter className="p-4 border-t bg-gray-50 rounded-b-lg flex justify-end">
-             <AlertDialog open={feedbackDialogOpen} onOpenChange={setFeedbackDialogOpen}>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline" className="rounded-md shadow-sm text-sm" disabled={!riskResult}>Provide Feedback</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="rounded-lg shadow-md bg-white">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Provide Feedback on Analysis</AlertDialogTitle>
-                    <AlertDialogDescription className="text-gray-600">
-                      Help improve SafeCrawl! If you believe the analysis for <span className="font-medium text-primary break-all">{url}</span> is inaccurate, please provide details below.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="feedback-text" className="text-right text-gray-700">
-                        Feedback
-                      </Label>
-                      <Textarea
-                        id="feedback-text"
-                        value={feedbackText}
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setFeedbackText(e.target.value)}
-                        placeholder="e.g., This URL is actually safe because..."
-                        className="col-span-3 h-24 rounded-md border-gray-300 focus:ring-primary focus:border-primary"
-                      />
-                    </div>
-                  </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="rounded-md">Cancel</AlertDialogCancel>
-                    <Button
-                      onClick={submitFeedback}
-                      disabled={isSubmittingFeedback || !feedbackText.trim()}
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm"
-                      >
-                      {isSubmittingFeedback ? "Submitting..." : "Submit Feedback"}
-                    </Button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-           </CardFooter>
-        </Card>
-      )}
+                </section>
 
-      {/* Tooltip components need a provider at a higher level if used */}
-      {/* Assuming TooltipProvider is wrapped around the relevant sections or the whole page */}
-    </div>
+                {/* Details Section - Rendered as bullet points */}
+                {riskResult.detailedAnalysis && (
+                    <section>
+                    <h2 className="text-lg font-semibold flex items-center gap-2 mb-2 text-[#1a1a1a]">
+                        Details
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-gray-500 cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                            <p>In-depth explanation of detected risks or safety confirmation.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </h2>
+                    <ul className="list-disc list-inside text-gray-700 space-y-1 text-base leading-relaxed">
+                        {riskResult.detailedAnalysis.split('\n').map((point, index) => (
+                        point.trim() && <li key={index}>{point.trim()}</li> // Render non-empty lines as list items
+                        ))}
+                    </ul>
+                    </section>
+                )}
+
+
+                {/* Recommendations Section */}
+                <section>
+                <h2 className="text-lg font-semibold flex items-center gap-2 mb-2 text-[#1a1a1a]">
+                    Recommendations
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-gray-500 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                        <p>Suggested actions based on the analysis results.</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </h2>
+                <ul className="list-disc list-inside text-gray-700 space-y-1 text-base">
+                    {riskLevel && riskLevel.label === "Dangerous" ? (
+                        <>
+                        <li><span className="font-semibold">Strongly avoid</span> accessing this URL.</li>
+                        <li>Do not enter any personal information.</li>
+                        <li>Consider reporting the URL if it seems malicious (e.g., to Google Safe Browsing).</li>
+                        </>
+                    ) : riskLevel && riskLevel.label === "Warning" ? (
+                        <>
+                        <li>Proceed with <span className="font-semibold">extreme caution</span>.</li>
+                        <li>Verify the website's authenticity before interacting.</li>
+                        <li>Be wary of requests for login credentials or personal data.</li>
+                        </>
+                    ) : (
+                        <li>The URL is likely safe to visit.</li>
+                    )}
+                    <li>Always keep your browser and security software updated.</li>
+                </ul>
+                </section>
+            </CardContent>
+            <CardFooter className="p-4 border-t bg-gray-50 rounded-b-lg flex justify-end">
+                <AlertDialog open={feedbackDialogOpen} onOpenChange={setFeedbackDialogOpen}>
+                    <AlertDialogTrigger asChild>
+                    <Button variant="outline" className="rounded-md shadow-sm text-sm hover:bg-gray-100" disabled={!riskResult}>Provide Feedback</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="rounded-lg shadow-md bg-white">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Provide Feedback on Analysis</AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-600">
+                        Help improve SafeCrawl! If you believe the analysis for <span className="font-medium text-primary break-all">{url}</span> is inaccurate, please provide details below.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="feedback-text" className="text-right text-gray-700">
+                            Feedback
+                        </Label>
+                        <Textarea
+                            id="feedback-text"
+                            value={feedbackText}
+                            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setFeedbackText(e.target.value)}
+                            placeholder="e.g., This URL is actually safe because..."
+                            className="col-span-3 h-24 rounded-md border-gray-300 focus:ring-primary focus:border-primary"
+                        />
+                        </div>
+                    </div>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel className="rounded-md hover:bg-gray-100">Cancel</AlertDialogCancel>
+                        <Button
+                        onClick={submitFeedback}
+                        disabled={isSubmittingFeedback || !feedbackText.trim()}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm"
+                        >
+                        {isSubmittingFeedback ? "Submitting..." : "Submit Feedback"}
+                        </Button>
+                    </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </CardFooter>
+            </Card>
+        )}
+        </div>
+    </TooltipProvider>
   );
 }
-
-// Ensure TooltipProvider wraps components using Tooltip
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CardFooter } from "@/components/ui/card";
