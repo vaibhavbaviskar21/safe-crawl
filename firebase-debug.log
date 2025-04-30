@@ -1,0 +1,69 @@
+[debug] [2025-04-30T10:50:34.216Z] ----------------------------------------------------------------------
+[debug] [2025-04-30T10:50:34.219Z] Command:       /nix/store/56fk3hhkk2lw9q5wdlq0v1ns65scwja4-nodejs-20.19.0/bin/node /home/user/.global_modules/bin/firebase init hosting
+[debug] [2025-04-30T10:50:34.220Z] CLI Version:   14.2.1
+[debug] [2025-04-30T10:50:34.220Z] Platform:      linux
+[debug] [2025-04-30T10:50:34.220Z] Node Version:  v20.19.0
+[debug] [2025-04-30T10:50:34.220Z] Time:          Wed Apr 30 2025 10:50:34 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-04-30T10:50:34.220Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-30T10:50:34.227Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-30T10:50:34.228Z] > authorizing via signed-in user (bawiskarvaibhav@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/user/studio
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2025-04-30T10:51:14.425Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:14.426Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:14.436Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2025-04-30T10:51:14.436Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"123456","name":"Safecrawl"}
+[debug] [2025-04-30T10:51:15.303Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 400
+[debug] [2025-04-30T10:51:15.303Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"error":{"code":400,"message":"field [project_id] has issue [project_id contains invalid characters]","status":"INVALID_ARGUMENT","details":[{"@type":"type.googleapis.com/google.rpc.BadRequest","fieldViolations":[{"field":"project_id","description":"project_id contains invalid characters"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"url":"https://cloud.google.com/resource-manager/reference/rest/v1/projects"}]}]}}
+[debug] [2025-04-30T10:51:15.332Z] FirebaseError: Request to https://cloudresourcemanager.googleapis.com/v1/projects had HTTP Error: 400, field [project_id] has issue [project_id contains invalid characters]
+    at responseToError (/home/user/.global_modules/lib/node_modules/firebase-tools/lib/responseToError.js:52:12)
+    at RetryOperation._fn (/home/user/.global_modules/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
+[debug] [2025-04-30T10:51:25.808Z] ----------------------------------------------------------------------
+[debug] [2025-04-30T10:51:25.811Z] Command:       /nix/store/56fk3hhkk2lw9q5wdlq0v1ns65scwja4-nodejs-20.19.0/bin/node /home/user/.global_modules/bin/firebase projects:create safe-crawl-project-unique
+[debug] [2025-04-30T10:51:25.812Z] CLI Version:   14.2.1
+[debug] [2025-04-30T10:51:25.812Z] Platform:      linux
+[debug] [2025-04-30T10:51:25.812Z] Node Version:  v20.19.0
+[debug] [2025-04-30T10:51:25.812Z] Time:          Wed Apr 30 2025 10:51:25 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-04-30T10:51:25.813Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-30T10:51:25.820Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-30T10:51:25.821Z] > authorizing via signed-in user (bawiskarvaibhav@gmail.com)
+[debug] [2025-04-30T10:51:33.461Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:33.463Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:33.472Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2025-04-30T10:51:33.473Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"safe-crawl-project-unique","name":"safecrawl"}
+[debug] [2025-04-30T10:51:34.420Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 200
+[debug] [2025-04-30T10:51:34.420Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"name":"operations/create_project.global.4747131661610587150"}
+[debug] [2025-04-30T10:51:34.422Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:34.422Z] Checked if tokens are valid: true, expires at: 1746013257755
+[debug] [2025-04-30T10:51:34.423Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.4747131661610587150 [none]
+[debug] [2025-04-30T10:51:35.216Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.4747131661610587150 200
+[debug] [2025-04-30T10:51:35.219Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.4747131661610587150 {"name":"operations/create_project.global.4747131661610587150","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","ready":true},"done":true,"error":{"code":8,"message":"The project cannot be created because you have exceeded your allotted project quota.","details":[{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"description":"The project cannot be created because you have exceeded your allotted project quota."}]}]}}
+[debug] [2025-04-30T10:51:35.248Z] FirebaseError: The project cannot be created because you have exceeded your allotted project quota.
+    at OperationPoller.poll (/home/user/.global_modules/lib/node_modules/firebase-tools/lib/operation-poller.js:24:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async createCloudProject (/home/user/.global_modules/lib/node_modules/firebase-tools/lib/management/projects.js:213:29)
+    at async createFirebaseProjectAndLog (/home/user/.global_modules/lib/node_modules/firebase-tools/lib/management/projects.js:71:9)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
