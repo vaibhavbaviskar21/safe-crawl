@@ -24,23 +24,22 @@ body {
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%; /* Existing red */
+    --accent: 240 4.8% 95.9%; /* Light gray for accent hover */
+    --accent-foreground: 240 5.9% 10%; /* Dark text for accent hover */
+    --destructive: 0 79% 63%; /* #e74c3c - Danger color */
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
+    --border: 240 5.9% 90%; /* Light border color */
     --input: 240 5.9% 90%;
-    --ring: 210 100% 20%; /* Deep blue for ring */
-    --radius: 0.5rem;
+    --ring: 210 100% 20%; /* Deep blue for focus rings */
+    --radius: 0.5rem; /* Consistent border radius */
 
     /* SafeCrawl Specific Colors */
     --success: 145 63% 42%; /* #27ae60 */
-    --success-foreground: 0 0% 100%;
+    --success-foreground: 0 0% 98%; /* White text for success */
     --warning: 39 92% 54%; /* #f39c12 */
-    --warning-foreground: 0 0% 100%;
+    --warning-foreground: 240 10% 3.9%; /* Dark text for warning */
     --danger: 0 79% 63%; /* #e74c3c */
-    --danger-foreground: 0 0% 100%;
-    --moderate-risk: 39 92% 54%; /* Keep warning color */
+    --danger-foreground: 0 0% 98%; /* White text for danger */
 
     /* Chart colors (optional, can be adjusted) */
     --chart-1: 12 76% 61%;
@@ -51,33 +50,34 @@ body {
   }
   .dark {
     /* Define dark mode variables if needed, keeping consistency */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --background: 240 10% 3.9%; /* Very dark gray */
+    --foreground: 0 0% 98%; /* Light text */
+    --card: 240 3.7% 10%; /* Darker card background */
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 210 100% 70%; /* Lighter blue for dark mode */
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 210 100% 60%; /* Lighter blue for dark mode primary */
+    --primary-foreground: 240 10% 3.9%; /* Dark text for light blue */
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%; /* Dark accent for dark mode hover */
+    --accent-foreground: 0 0% 98%; /* Light text for dark accent hover */
     --destructive: 0 79% 63%; /* Keep same red */
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
+    --border: 240 3.7% 20%; /* Slightly lighter border for dark */
     --input: 240 3.7% 15.9%;
-    --ring: 210 100% 70%;
+    --ring: 210 100% 60%; /* Lighter blue ring for dark mode */
+
     /* SafeCrawl Specific Colors - Dark */
-    --success: 145 58% 50%;
-    --success-foreground: 0 0% 10%;
-    --warning: 39 88% 60%;
-    --warning-foreground: 0 0% 10%;
-    --danger: 0 75% 70%;
-    --danger-foreground: 0 0% 10%;
-    --moderate-risk: 39 88% 60%;
+    --success: 145 58% 50%; /* Brighter green */
+    --success-foreground: 240 10% 3.9%; /* Dark text for bright green */
+    --warning: 39 88% 60%; /* Brighter orange */
+    --warning-foreground: 240 10% 3.9%; /* Dark text for bright orange */
+    --danger: 0 75% 70%; /* Brighter red */
+    --danger-foreground: 240 10% 3.9%; /* Dark text for bright red */
+
     /* Chart colors for dark mode */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -89,27 +89,29 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border; /* Apply theme border color */
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground; /* Apply theme background and text color */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600; /* Maintain slightly bolder headings */
+    font-weight: 600; /* Slightly bolder headings */
   }
 }
 
 @layer utilities {
-  /* Subtle Animated Background Pattern */
+  /* Subtle Animated Background Pattern - Optional */
   .bg-grid-pattern {
-    background-image: linear-gradient(to right, hsla(var(--border)/0.5) 1px, transparent 1px), linear-gradient(to bottom, hsla(var(--border)/0.5) 1px, transparent 1px);
-    background-size: 30px 30px;
-    animation: bg-pan 10s linear infinite;
+    background-image: linear-gradient(to right, hsl(var(--border)/0.1) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)/0.1) 1px, transparent 1px);
+    background-size: 40px 40px; /* Larger grid */
+    /* animation: bg-pan 15s linear infinite; */ /* Animation can be distracting */
   }
 
   @keyframes bg-pan {
     0% { background-position: 0% 0%; }
-    100% { background-position: 30px 30px; }
+    100% { background-position: 40px 40px; }
   }
 
   /* Gradient Text Effect */
@@ -119,22 +121,20 @@ body {
 
   /* Glassmorphism Card Style */
   .glassmorphism-card {
-    @apply bg-white/60 backdrop-filter backdrop-blur-lg border border-white/30 rounded-xl shadow-lg;
+    @apply bg-white/60 dark:bg-black/50 backdrop-filter backdrop-blur-lg border border-white/30 dark:border-white/10 rounded-xl shadow-lg;
   }
-  .dark .glassmorphism-card {
-     @apply bg-black/50 backdrop-filter backdrop-blur-lg border border-white/10 rounded-xl shadow-lg;
-  }
+
 
   /* Neon Glow Hover Effect for Button */
   .neon-glow-hover {
     transition: box-shadow 0.3s ease-in-out, transform 0.2s ease;
   }
   .neon-glow-hover:hover:not(:disabled) {
-    box-shadow: 0 0 5px theme('colors.blue.500'), 0 0 10px theme('colors.blue.500'), 0 0 15px theme('colors.blue.500');
-    transform: translateY(-1px);
+     box-shadow: 0 0 6px hsl(var(--primary)/0.6), 0 0 12px hsl(var(--primary)/0.4);
+     transform: translateY(-1px);
   }
-  .neon-glow-hover:active:not(:disabled) {
-      transform: scale(0.98); /* Microinteraction */
+   .neon-glow-hover:active:not(:disabled) {
+      transform: scale(0.98); /* Click microinteraction */
   }
 
 
@@ -154,23 +154,21 @@ body {
     }
   }
 
-   /* Ribbon Style */
-  .ribbon-label {
-    @apply relative px-4 py-1 text-sm font-medium text-white rounded-r-md;
-  }
-  .ribbon-label::before {
-    content: '';
-    position: absolute;
-    left: -10px; /* Adjust as needed */
-    top: 0;
-    border-top: 14px solid transparent; /* Half of height */
-    border-bottom: 14px solid transparent; /* Half of height */
-    border-right: 10px solid; /* Same as left offset */
-    border-right-color: inherit; /* Inherits the background color */
-  }
+}
 
-    .bg-success { background-color: hsl(var(--success)); color: hsl(var(--success-foreground)); border-right-color: hsl(var(--success)); }
-    .bg-warning { background-color: hsl(var(--warning)); color: hsl(var(--warning-foreground)); border-right-color: hsl(var(--warning)); }
-    .bg-danger { background-color: hsl(var(--danger)); color: hsl(var(--danger-foreground)); border-right-color: hsl(var(--danger)); }
-
+/* Custom scrollbar styling (optional) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background)/0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground)/0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+   background: hsl(var(--muted-foreground)/0.8);
 }

@@ -14,7 +14,13 @@ const badgeVariants = cva(
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        success: // Added success variant
+          "border-transparent bg-success text-success-foreground hover:bg-success/80",
+        warning: // Added warning variant
+           "border-transparent bg-warning text-warning-foreground hover:bg-warning/80", // Use appropriate text color for warning
+        danger: // Alias for destructive
+            "border-transparent bg-danger text-danger-foreground hover:bg-danger/80",
+        outline: "text-foreground border-border", // Use theme border color
       },
     },
     defaultVariants: {
