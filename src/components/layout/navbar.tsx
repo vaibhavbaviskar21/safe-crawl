@@ -18,15 +18,24 @@ export default function Navbar() {
       document.documentElement.classList.remove('dark');
     }
     // Optionally save preference to localStorage
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+    try {
+      localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+    } catch (error) {
+        console.warn("Could not save theme preference to localStorage:", error);
+    }
   }, [darkMode]);
 
    useEffect(() => {
     // Check localStorage for theme preference on initial load
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setDarkMode(true);
-    }
+     try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+        }
+     } catch (error) {
+         console.warn("Could not read theme preference from localStorage:", error);
+     }
+
   }, []);
 
 

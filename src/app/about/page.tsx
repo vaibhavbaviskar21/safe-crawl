@@ -6,8 +6,8 @@ import { ShieldCheck } from "lucide-react";
 export default function AboutPage() {
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="shadow-lg rounded-lg overflow-hidden">
-        <CardHeader className="bg-primary/10 p-6">
+      <Card className="shadow-lg rounded-lg overflow-hidden bg-card border border-border/30">
+        <CardHeader className="bg-muted/50 p-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-8 w-8 text-primary" />
             <CardTitle className="text-2xl font-bold text-foreground">About SafeCrawl</CardTitle>

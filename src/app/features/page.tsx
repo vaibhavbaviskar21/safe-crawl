@@ -1,7 +1,7 @@
 
 // src/app/features/page.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cpu, BarChart, Users, ShieldCheck, AlertTriangle, Activity, CheckCircle } from "lucide-react";
+import { Cpu, BarChart, Users, ShieldCheck, Activity, CheckCircle } from "lucide-react"; // Removed AlertTriangle as it's used for warnings
 
 const features = [
   {
@@ -15,7 +15,7 @@ const features = [
     description: "Provides clear explanations for each identified risk, helping you understand the potential threats.",
   },
   {
-    icon: ShieldCheck,
+    icon: ShieldCheck, // Changed icon to represent confidence/security
     title: "Confidence Scoring",
     description: "Get a confidence score for each analysis, indicating the AI's certainty about the risk assessment.",
   },
@@ -46,8 +46,8 @@ export default function FeaturesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {features.map((feature, index) => (
-          <Card key={index} className="shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden bg-card border border-border/20">
-            <CardHeader className="flex flex-col items-center text-center p-6 bg-primary/5">
+          <Card key={index} className="shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden bg-card border border-border/30">
+            <CardHeader className="flex flex-col items-center text-center p-6 bg-muted/50">
               <feature.icon className="h-10 w-10 text-primary mb-4" />
               <CardTitle className="text-xl font-semibold text-foreground">{feature.title}</CardTitle>
             </CardHeader>
