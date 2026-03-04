@@ -1,52 +1,56 @@
 
-"use client"; // Mark as client component for state/interaction
+"use client";
 
 import Link from 'next/link';
-import { ShieldCheck, Moon, Sun } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { ShieldCheck, Moon, Sun, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react'; // Import hooks for theme toggle
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/features', label: 'Features' },
+];
 
 export default function Navbar() {
-  // Basic theme toggle state (replace with a proper theme provider if needed)
   const [darkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Apply theme on mount and when darkMode changes
+    try {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') setDarkMode(true);
+    } catch {
+      // localStorage unavailable
+    }
+  }, []);
+
+  useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-    // Optionally save preference to localStorage
     try {
       localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-    } catch (error) {
-        console.warn("Could not save theme preference to localStorage:", error);
+    } catch {
+      // localStorage unavailable
     }
   }, [darkMode]);
 
-   useEffect(() => {
-    // Check localStorage for theme preference on initial load
-     try {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-          setDarkMode(true);
-        }
-     } catch (error) {
-         console.warn("Could not read theme preference from localStorage:", error);
-     }
-
-  }, []);
-
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
+  // Close mobile menu when navigating
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
@@ -55,35 +59,69 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/" className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              Home
-            </Link>
-            <Link href="/about" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              About
-            </Link>
-             <Link href="/features" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              Features
-            </Link>
-             {/* Add more links as needed */}
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  pathname === link.href
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-primary hover:bg-accent/50"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Dark Mode Toggle */}
-          <div className="flex items-center">
+          {/* Right side: dark mode toggle + mobile menu button */}
+          <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleTheme}
+              onClick={() => setDarkMode((d) => !d)}
               className="rounded-full text-muted-foreground hover:text-foreground hover:bg-accent/50"
               aria-label="Toggle dark mode"
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-             {/* You can add Auth buttons here if needed */}
+
+            {/* Mobile menu toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              className="md:hidden rounded-full text-muted-foreground hover:text-foreground hover:bg-accent/50"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-md px-4 py-3 space-y-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "block px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                pathname === link.href
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-primary hover:bg-accent/50"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

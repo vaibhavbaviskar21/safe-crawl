@@ -32,7 +32,7 @@ export async function analyzeUrlDetailed(input: AnalyzeUrlDetailedInput): Promis
 }
 
 const analyzeUrlPrompt = ai.definePrompt({
-  name: 'analyzeUrlPrompt',
+  name: 'analyzeUrlDetailedPrompt',
   input: {
     schema: z.object({
       url: z.string().describe('The URL to analyze.'),
@@ -47,6 +47,29 @@ const analyzeUrlPrompt = ai.definePrompt({
   prompt: `You are an AI assistant specializing in cybersecurity. A user has provided a URL that has been flagged as potentially risky for the following reasons: {{{riskReasons}}}.\n\nYour task is to provide a detailed breakdown of each identified risk. For each risk, explain what it is, how it can harm the user, and what specific characteristics of the URL might indicate this risk. Focus on providing transparent and actionable information.\n\nURL: {{{url}}}\n\nFormat the detailed analysis as a list of concise bullet points, separated by newline characters (\\n). For example:\n• Point 1\n• Point 2\n• Point 3`,
 });
 
+/**
+ * Builds a plain-text detailed analysis from heuristic risk reasons without AI.
+ * Used as a fallback when the AI service is unavailable.
+ */
+function buildHeuristicDetailedAnalysis(riskReasons: string[], isSafe: boolean): string {
+  if (isSafe) {
+    return [
+      '• No suspicious patterns detected in the URL structure.',
+      '• HTTPS encryption is in use, protecting data in transit.',
+      '• The domain does not match any known phishing or malware patterns.',
+      '• Always verify the site\'s identity before sharing sensitive information.',
+    ].join('\n');
+  }
+
+  const bullets = riskReasons.map((reason) => `• ${reason}`);
+  bullets.push(
+    '• Do not enter any personal, financial, or login credentials on this page.',
+    '• Consider reporting this URL to your browser\'s safe browsing service.',
+    '• Keep your browser and security software up to date.',
+  );
+  return bullets.join('\n');
+}
+
 const analyzeUrlDetailedFlow = ai.defineFlow<
   typeof AnalyzeUrlDetailedInputSchema,
   typeof AnalyzeUrlDetailedOutputSchema
@@ -59,24 +82,28 @@ const analyzeUrlDetailedFlow = ai.defineFlow<
   async input => {
     const riskAssessment: UrlRiskAssessment = await analyzeUrl(input.url);
 
-    // Only proceed with detailed analysis if there are risk reasons
-    let detailedAnalysis = "No specific risks were identified based on the initial scan.";
-    if (riskAssessment.riskReasons.length > 0) {
-      const { output } = await analyzeUrlPrompt({
-        url: input.url,
-        riskReasons: riskAssessment.riskReasons,
-      });
-      detailedAnalysis = output!.detailedAnalysis;
-    } else {
-        // If safe, provide a simple confirmation message in the expected format.
-        detailedAnalysis = "• The URL is considered safe based on the initial scan.";
-    }
+    let detailedAnalysis: string;
 
+    if (riskAssessment.riskReasons.length === 0) {
+      // Safe URL — provide a confirmation message without needing AI
+      detailedAnalysis = buildHeuristicDetailedAnalysis([], true);
+    } else {
+      // Risky URL — try AI enrichment, fall back to heuristic bullets on failure
+      try {
+        const { output } = await analyzeUrlPrompt({
+          url: input.url,
+          riskReasons: riskAssessment.riskReasons,
+        });
+        detailedAnalysis = output?.detailedAnalysis ?? buildHeuristicDetailedAnalysis(riskAssessment.riskReasons, false);
+      } catch {
+        detailedAnalysis = buildHeuristicDetailedAnalysis(riskAssessment.riskReasons, false);
+      }
+    }
 
     return {
       riskAssessment: {
         ...riskAssessment,
-        detailedAnalysis: detailedAnalysis,
+        detailedAnalysis,
       },
     };
   }
